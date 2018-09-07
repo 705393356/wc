@@ -51,7 +51,7 @@ public class WcFace extends JFrame implements ActionListener{
 	
 	private final JButton exit = new JButton("\u9000\u51FA");
 	private final JButton selectFile = new JButton("\u9009\u62E9\u6587\u4EF6");
-	private final JButton WordNum = new JButton("\u8BA1\u7B97\u5B57\u7B26\u6570");
+	private final JButton CountCodeNum = new JButton("\u8BA1\u7B97\u5B57\u7B26\u6570");
 	private final JButton LinesNum = new JButton("\u8BA1\u7B97\u884C\u6570");
 	
 	private final JLabel totalLines = new JLabel("\u603B\u884C\u6570\uFF1A");
@@ -59,6 +59,7 @@ public class WcFace extends JFrame implements ActionListener{
 	private final JLabel NullLines = new JLabel("\u7A7A\u884C\uFF1A");
 	private final JLabel CodeNum = new JLabel("\u5B57\u7B26\u6570\uFF1A");
 	private final JLabel Annotation = new JLabel("\u6CE8\u91CA\u884C\uFF1A");
+	private final JLabel WordsNum = new JLabel("\u5355\u8BCD\u91CF\uFF1A");
 
 	/**
 	 * Create the frame.
@@ -82,6 +83,7 @@ public class WcFace extends JFrame implements ActionListener{
 //		总行数文本
 		totalLines.setBounds(5, 105, 214, 24);
 		totalLines.setFont(new Font("宋体", Font.PLAIN, 20));
+		contentPane.setLayout(null);
 		contentPane.setLayout(null);
 		contentPane.setLayout(null);
 		contentPane.add(exit);
@@ -109,12 +111,12 @@ public class WcFace extends JFrame implements ActionListener{
 		
 //		字符数文本
 		CodeNum.setFont(new Font("宋体", Font.PLAIN, 20));
-		CodeNum.setBounds(5, 66, 214, 23);
+		CodeNum.setBounds(5, 59, 214, 23);
 		contentPane.add(CodeNum);
 		
 //		字符数按钮
-		WordNum.setBounds(270, 204, 154, 23);
-		contentPane.add(WordNum);
+		CountCodeNum.setBounds(270, 204, 154, 23);
+		contentPane.add(CountCodeNum);
 		
 //		行数按钮
 		LinesNum.setBounds(270, 180, 154, 23);
@@ -122,12 +124,14 @@ public class WcFace extends JFrame implements ActionListener{
 		Annotation.setFont(new Font("宋体", Font.PLAIN, 20));
 		Annotation.setBounds(5, 175, 108, 29);
 		contentPane.add(Annotation);
+		WordsNum.setFont(new Font("宋体", Font.PLAIN, 20));
+		WordsNum.setBounds(5, 82, 178, 24);
 		
-		this.setLayout(new BorderLayout());
+		contentPane.add(WordsNum);
 		exit.addActionListener(this);
 		selectFile.addActionListener(this);
 		LinesNum.addActionListener(this);
-		WordNum.addActionListener(this);
+		CountCodeNum.addActionListener(this);
 	}
 
 	@Override
@@ -138,7 +142,8 @@ public class WcFace extends JFrame implements ActionListener{
 		if(soruceName.equals("选择文件")){// 监听事件
 			String fileslocation = "";
 			 
-			JFileChooser chooser = new JFileChooser();             //设置选择器
+			JFileChooser chooser = new JFileChooser();            //设置选择器
+			chooser.setFileSelectionMode(chooser.FILES_ONLY);
 			chooser.setMultiSelectionEnabled(true);             //设为多选
 			chooser.showOpenDialog(new JFrame());				//打开文件选择框
 			File[] files = chooser.getSelectedFiles();			//获取所有文件
@@ -148,15 +153,6 @@ public class WcFace extends JFrame implements ActionListener{
 				fileslocation = fileslocation  + files[i].getPath() + "|";
 			}
 			textField.setText(fileslocation);
-			
-//			FileDialog fd=new FileDialog(new JFrame());//弹出显示窗口
-//			fd.setVisible(true);
-//			if(fd.getDirectory()==null) {
-//				textField.setText("请选择");
-//			}else {
-//				textField.setText(fd.getDirectory()+fd.getFile());// 路径地址+文件名
-//			}
-			
 			
 		}else if(soruceName.equals("退出")){// 监听事件
 			System.exit(0);//退出
@@ -178,6 +174,7 @@ public class WcFace extends JFrame implements ActionListener{
 						System.out.println("空行:"+newCode.getNullLines());
 						System.out.println("代码行:"+newCode.getCodeLines());
 						System.out.println("注释行:"+newCode.getAnnotations());
+						System.out.println("单词量："+ newCode.getWordNum());
 						
 						code.Add(newCode);
 					} catch (Exception e1) {
@@ -190,6 +187,7 @@ public class WcFace extends JFrame implements ActionListener{
 			codeLines.setText("代码行："+code.getCodeLines());
 			NullLines.setText("空行："+code.getNullLines());
 			Annotation.setText("注释行："+code.getAnnotations());
+			WordsNum.setText("单词量："+code.getWordNum());
 			
 		}else if(soruceName.equals("计算字符数")){
 			FileProcessService service=new FileProcessService();//业务操作类
@@ -200,19 +198,16 @@ public class WcFace extends JFrame implements ActionListener{
 			int num =0;
 			
 			for(int i=0;i<str.length;i++) {
-				
-					try {
-						
-						String str2 = service.StringFilter(FileProcessService.File2String(str[i]));
-						num = num + str2.length();
-						
-					} catch (PatternSyntaxException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+				try {
+					String str2 = service.StringFilter(FileProcessService.File2String(str[i]));
+					num = num + str2.length();
+				} catch (PatternSyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			CodeNum.setText("字符数："+num);
 		}

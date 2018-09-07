@@ -47,6 +47,7 @@ public class FileProcessService {
 	public static CodeFile getLines(String filelocation) throws Exception{
 		CodeFile codeFile = new CodeFile();
 		String str="";
+		int WordsNum = 0;
 		File file=new File(filelocation);
 		if(file.exists()){
 			FileInputStream input=new FileInputStream(file);
@@ -61,11 +62,11 @@ public class FileProcessService {
 					codeFile.setCodeLines(codeFile.getCodeLines()+1);
 					String str2 = str.trim();
 					System.out.println(str2);
-					System.out.println("---------------");
 					
 					//在代码行计算单词数
-//					int WordsNum = DetermineWord(str2);
-//					codeFile.setWordNum(WordsNum);
+					int newNum = DetermineWord(str2);
+					System.out.println("---------------" + newNum);
+					WordsNum +=newNum;
 				}
 				//余下注释
 				else {
@@ -74,6 +75,7 @@ public class FileProcessService {
 				
 				
 			}
+			codeFile.setWordNum(WordsNum);
 			codeFile.setTotalLines();
 		}else {
 			return null;
@@ -85,41 +87,27 @@ public class FileProcessService {
 	
 	//判断字符串中单词数量，包含了去符号化
 	public static int DetermineWord(String str){
-		int WordsNum = 0;
-		System.out.println("???"+str);
-		String regEx = "[`~!@#$%^&*()\\-+={}':;,\\[\\].<>/?￥%…（）_+|【】‘；：”“’。，、？\\s\\\\]";
-	    Pattern p = Pattern.compile(regEx);
-		//初步用空格分隔
-	    String[] str2 = str.split(" ");
+		int num = 0;
 		
-		for(int i=0;i<str2.length;i++){
-			
-			String str3 = str2[i];
-			Matcher m = p.matcher(str3);
-			str3 = m.replaceAll(" ");
-//			str3 = str3.replaceAll("\\p{P}", " ");
-			if(!(str3.equals(" ")||str3==null)){
-//				System.out.println(str3);
-				if(str3.trim().indexOf(" ")==-1){
-					WordsNum = WordsNum + 1;
-				}else {
-					String[] str4 = str3.split(" ");
-					System.out.println(str3);
-					for(int j=0;j<str4.length;j++){
-						if(str4[j].equals(" ")){
-							continue;
-						}else {
-							System.out.println("单词数+1");
-							WordsNum = WordsNum + 1;
-						}
-					}
-					
-				}
-				
+		char[] c = str.toCharArray();
+		int flag = 0;
+		
+		for(int i=0;i<c.length;i++){
+//			System.out.print(c[i] +" ");
+			if(Character.isLetterOrDigit(c[i])&&flag==0){
+				flag = 1;
+			}else if(Character.isLetterOrDigit(c[i])&&flag==1){
+				continue;
+			}else if(!Character.isLetterOrDigit(c[i])&&flag==1){
+				num++;
+				flag=0;
+				continue;
 			}
 			
+			
 		}
-		return WordsNum;
+		System.out.println(num);
+		return num;
 		
 	}
 	

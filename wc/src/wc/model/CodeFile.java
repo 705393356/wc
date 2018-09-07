@@ -2,7 +2,6 @@ package wc.model;
 
 public class CodeFile {
 
-	private int CodeNum = 0;
 	private int CodeLines = 0;
 	private int NullLines = 0;
 	private int Annotations = 0;
@@ -13,9 +12,8 @@ public class CodeFile {
 		super();
 	}
 
-	public CodeFile(int codeNum, int codeLines, int nullLines, int annotations) {
+	public CodeFile(int codeLines, int nullLines, int annotations) {
 		super();
-		CodeNum = codeNum;
 		CodeLines = codeLines;
 		NullLines = nullLines;
 		Annotations = annotations;
@@ -26,16 +24,11 @@ public class CodeFile {
 		this.setCodeLines(this.getCodeLines()+code2.getCodeLines());
 		this.setNullLines(this.getNullLines()+code2.getNullLines());
 		this.setTotalLines2(this.getTotalLines() + code2.getTotalLines());
+		this.setWordNum(this.getWordNum()+code2.getWordNum());
 		
 		return this;
 	}
-	
-	public int getCodeNum() {
-		return CodeNum;
-	}
-	public void setCodeNum(int codeNum) {
-		CodeNum = codeNum;
-	}
+
 	public int getCodeLines() {
 		return CodeLines;
 	}
