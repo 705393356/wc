@@ -21,6 +21,15 @@ public class CodeFile {
 		Annotations = annotations;
 	}
 	
+	public CodeFile Add(CodeFile code2){
+		this.setAnnotations(this.getAnnotations()+ code2.getAnnotations());
+		this.setCodeLines(this.getCodeLines()+code2.getCodeLines());
+		this.setNullLines(this.getNullLines()+code2.getNullLines());
+		this.setTotalLines2(this.getTotalLines() + code2.getTotalLines());
+		
+		return this;
+	}
+	
 	public int getCodeNum() {
 		return CodeNum;
 	}
@@ -51,7 +60,11 @@ public class CodeFile {
 	public void setTotalLines() {
 		TotalLines = this.getCodeLines() + this.getNullLines() + this.getAnnotations();
 	}
-
+	
+	public void setTotalLines2(int totalLines){
+		TotalLines = totalLines;
+	}
+	
 	public int getWordNum() {
 		return WordNum;
 	}

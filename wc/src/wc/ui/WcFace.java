@@ -12,7 +12,10 @@ import wc.model.CodeFile;
 import wc.service.FileProcessService;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.regex.PatternSyntaxException;
 import java.awt.event.ActionEvent;
@@ -28,6 +31,7 @@ public class WcFace extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
 	private JTextField textField;
+	
 
 	/**
 	 * Launch the application.
@@ -67,7 +71,7 @@ public class WcFace extends JFrame implements ActionListener{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		
+//		退出按钮
 		exit.setBounds(270, 228, 154, 23);
 		exit.setBackground(Color.LIGHT_GRAY);
 		exit.addActionListener(new ActionListener() {
@@ -75,7 +79,7 @@ public class WcFace extends JFrame implements ActionListener{
 			}
 		});
 		
-//		JLabel totalLines = new JLabel("\u603B\u884C\u6570\uFF1A");
+//		总行数文本
 		totalLines.setBounds(5, 105, 214, 24);
 		totalLines.setFont(new Font("宋体", Font.PLAIN, 20));
 		contentPane.setLayout(null);
@@ -83,42 +87,43 @@ public class WcFace extends JFrame implements ActionListener{
 		contentPane.add(exit);
 		contentPane.add(totalLines);
 		
-//		JLabel codeLines = new JLabel("\u4EE3\u7801\u884C\uFF1A");
+//		代码行文本
 		codeLines.setFont(new Font("宋体", Font.PLAIN, 20));
 		codeLines.setBounds(5, 130, 214, 23);
 		contentPane.add(codeLines);
 		
-//		JLabel NullLines = new JLabel("\u7A7A\u884C\uFF1A");
+//		空行文本
 		NullLines.setFont(new Font("宋体", Font.PLAIN, 20));
 		NullLines.setBounds(5, 154, 214, 23);
 		contentPane.add(NullLines);
 		
 		textField = new JTextField();
-		textField.setText("\u6587\u4EF6\u5730\u5740");
+		textField.setText("请选择");
 		textField.setBounds(53, 10, 209, 23);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-//		JButton selectFile = new JButton("\u9009\u62E9\u6587\u4EF6");
+//		选择文件按钮
 		selectFile.setBounds(266, 10, 93, 23);
 		contentPane.add(selectFile);
 		
-//		JLabel label_3 = new JLabel("\u5B57\u7B26\u6570\uFF1A");
+//		字符数文本
 		CodeNum.setFont(new Font("宋体", Font.PLAIN, 20));
 		CodeNum.setBounds(5, 66, 214, 23);
 		contentPane.add(CodeNum);
 		
-//		JButton WordNum = new JButton("\u8BA1\u7B97\u5B57\u7B26\u6570");
+//		字符数按钮
 		WordNum.setBounds(270, 204, 154, 23);
 		contentPane.add(WordNum);
 		
-//		JButton LinesNum = new JButton("\u8BA1\u7B97\u884C\u6570");
+//		行数按钮
 		LinesNum.setBounds(270, 180, 154, 23);
 		contentPane.add(LinesNum);
 		Annotation.setFont(new Font("宋体", Font.PLAIN, 20));
 		Annotation.setBounds(5, 175, 108, 29);
-		
 		contentPane.add(Annotation);
+		
+		this.setLayout(new BorderLayout());
 		exit.addActionListener(this);
 		selectFile.addActionListener(this);
 		LinesNum.addActionListener(this);
@@ -131,10 +136,27 @@ public class WcFace extends JFrame implements ActionListener{
 		String soruceName=e.getActionCommand();
 		
 		if(soruceName.equals("选择文件")){// 监听事件
+			String fileslocation = "";
+			 
+			JFileChooser chooser = new JFileChooser();             //设置选择器
+			chooser.setMultiSelectionEnabled(true);             //设为多选
+			chooser.showOpenDialog(new JFrame());				//打开文件选择框
+			File[] files = chooser.getSelectedFiles();			//获取所有文件
 			
-			FileDialog fd=new FileDialog(new JFrame());//弹出显示窗口
-			fd.setVisible(true);
-			textField.setText(fd.getDirectory()+fd.getFile());// 路径地址+文件名
+			for(int i = 0;i<files.length;i++){
+				System.out.println(files[i].getPath());
+				fileslocation = fileslocation  + files[i].getPath() + "|";
+			}
+			textField.setText(fileslocation);
+			
+//			FileDialog fd=new FileDialog(new JFrame());//弹出显示窗口
+//			fd.setVisible(true);
+//			if(fd.getDirectory()==null) {
+//				textField.setText("请选择");
+//			}else {
+//				textField.setText(fd.getDirectory()+fd.getFile());// 路径地址+文件名
+//			}
+			
 			
 		}else if(soruceName.equals("退出")){// 监听事件
 			System.exit(0);//退出
@@ -144,39 +166,55 @@ public class WcFace extends JFrame implements ActionListener{
 			FileProcessService service=new FileProcessService();//业务操作类
 			String fileName=textField.getText();//得到路径
 			
-			try{
-				CodeFile code=service.getLines(fileName);
-				
-				totalLines.setText("总行数:" + code.getTotalLines());
-				codeLines.setText("代码行："+code.getCodeLines());
-				NullLines.setText("空行："+code.getNullLines());
-				Annotation.setText("注释行："+code.getAnnotations());
-				
-				System.out.println("总数行="+code.getTotalLines());
-				System.out.println("空行"+code.getNullLines());
-				System.out.println("代码行"+code.getCodeLines());
-				System.out.println("注释行"+code.getAnnotations());
-			}catch(Exception el){
-				el.printStackTrace();
+			String[] str = fileName.split("\\|");
+			CodeFile code= new CodeFile();
+			
+			for(int i = 0;i<str.length;i++){
+//				System.out.println(str[i]);
+					try {
+						CodeFile newCode=service.getLines(str[i]);
+						
+						System.out.println("总数行="+newCode.getTotalLines());
+						System.out.println("空行:"+newCode.getNullLines());
+						System.out.println("代码行:"+newCode.getCodeLines());
+						System.out.println("注释行:"+newCode.getAnnotations());
+						
+						code.Add(newCode);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 			}
+			totalLines.setText("总行数:" + code.getTotalLines());
+			codeLines.setText("代码行："+code.getCodeLines());
+			NullLines.setText("空行："+code.getNullLines());
+			Annotation.setText("注释行："+code.getAnnotations());
 			
 		}else if(soruceName.equals("计算字符数")){
 			FileProcessService service=new FileProcessService();//业务操作类
 			String fileLocation=textField.getText();//得到路径
 			
-			try {
-				
-				String str = service.StringFilter(FileProcessService.File2String(fileLocation));
-				CodeNum.setText("字符数："+str.length());
-				
-			} catch (PatternSyntaxException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			String[] str = fileLocation.split("\\|");
+			CodeFile code= new CodeFile();
+			int num =0;
 			
+			for(int i=0;i<str.length;i++) {
+				
+					try {
+						
+						String str2 = service.StringFilter(FileProcessService.File2String(str[i]));
+						num = num + str2.length();
+						
+					} catch (PatternSyntaxException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+			}
+			CodeNum.setText("字符数："+num);
 		}
 	}
 	
