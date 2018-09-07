@@ -56,20 +56,20 @@ public class FileProcessService {
 				if(str.trim().length()<1||str.trim().startsWith("{")||str.trim().startsWith("}")){
 					//判断空行
 					codeFile.setNullLines(codeFile.getNullLines()+1);
-				}else if(str.trim().startsWith("/*")||str.trim().startsWith("\\*")||str.trim().startsWith("*/")||str.trim().startsWith("//")){
+				}else if(!(str.trim().startsWith("/*")||str.trim().startsWith("\\*")||str.trim().startsWith("*/")||str.trim().startsWith("//")||str.trim().startsWith("*"))){
 					//判断代码行
 					codeFile.setCodeLines(codeFile.getCodeLines()+1);
+					String str2 = str.trim();
+					System.out.println(str2);
+					System.out.println("---------------");
+					
+					//在代码行计算单词数
+//					int WordsNum = DetermineWord(str2);
+//					codeFile.setWordNum(WordsNum);
 				}
 				//余下注释
 				else {
 					codeFile.setAnnotations(codeFile.getAnnotations()+1);
-				}
-				
-				//判断一行单词个数
-				if(!(str.trim().length()<1||str.trim().startsWith("{")||str.trim().startsWith("}"))){
-					
-					String str2 = str.trim();
-					codeFile.setWordNum(codeFile.getWordNum() + str2.split(" ").length);
 				}
 				
 				
@@ -82,4 +82,45 @@ public class FileProcessService {
 		return codeFile;
 		
 	}
+	
+	//判断字符串中单词数量，包含了去符号化
+	public static int DetermineWord(String str){
+		int WordsNum = 0;
+		System.out.println("???"+str);
+		String regEx = "[`~!@#$%^&*()\\-+={}':;,\\[\\].<>/?￥%…（）_+|【】‘；：”“’。，、？\\s\\\\]";
+	    Pattern p = Pattern.compile(regEx);
+		//初步用空格分隔
+	    String[] str2 = str.split(" ");
+		
+		for(int i=0;i<str2.length;i++){
+			
+			String str3 = str2[i];
+			Matcher m = p.matcher(str3);
+			str3 = m.replaceAll(" ");
+//			str3 = str3.replaceAll("\\p{P}", " ");
+			if(!(str3.equals(" ")||str3==null)){
+//				System.out.println(str3);
+				if(str3.trim().indexOf(" ")==-1){
+					WordsNum = WordsNum + 1;
+				}else {
+					String[] str4 = str3.split(" ");
+					System.out.println(str3);
+					for(int j=0;j<str4.length;j++){
+						if(str4[j].equals(" ")){
+							continue;
+						}else {
+							System.out.println("单词数+1");
+							WordsNum = WordsNum + 1;
+						}
+					}
+					
+				}
+				
+			}
+			
+		}
+		return WordsNum;
+		
+	}
+	
 }
