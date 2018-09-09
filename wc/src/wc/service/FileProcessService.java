@@ -51,6 +51,7 @@ public class FileProcessService {
 		File file=new File(filelocation);
 		if(file.exists()){
 			FileInputStream input=new FileInputStream(file);
+			@SuppressWarnings("resource")
 			BufferedReader reader=new BufferedReader(new InputStreamReader(input));
 			while((str=reader.readLine())!=null){
 				//判断几种行数

@@ -1,8 +1,7 @@
 package wc.ui;
 
-import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
-import java.awt.FileDialog;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,15 +19,17 @@ import java.io.IOException;
 import java.util.regex.PatternSyntaxException;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import javax.swing.JTable;
 import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+
 import javax.swing.JTextField;
 
 public class WcFace extends JFrame implements ActionListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
 	
@@ -143,7 +144,7 @@ public class WcFace extends JFrame implements ActionListener{
 			String fileslocation = "";
 			 
 			JFileChooser chooser = new JFileChooser();            //设置选择器
-			chooser.setFileSelectionMode(chooser.FILES_ONLY);
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setMultiSelectionEnabled(true);             //设为多选
 			chooser.showOpenDialog(new JFrame());				//打开文件选择框
 			File[] files = chooser.getSelectedFiles();			//获取所有文件
@@ -159,7 +160,6 @@ public class WcFace extends JFrame implements ActionListener{
 		
 		}else if(soruceName.equals("计算行数")){// 监听事件
 			
-			FileProcessService service=new FileProcessService();//业务操作类
 			String fileName=textField.getText();//得到路径
 			
 			String[] str = fileName.split("\\|");
@@ -168,7 +168,7 @@ public class WcFace extends JFrame implements ActionListener{
 			for(int i = 0;i<str.length;i++){
 //				System.out.println(str[i]);
 					try {
-						CodeFile newCode=service.getLines(str[i]);
+						CodeFile newCode=FileProcessService.getLines(str[i]);
 						
 						System.out.println("总数行="+newCode.getTotalLines());
 						System.out.println("空行:"+newCode.getNullLines());
@@ -190,16 +190,15 @@ public class WcFace extends JFrame implements ActionListener{
 			WordsNum.setText("单词量："+code.getWordNum());
 			
 		}else if(soruceName.equals("计算字符数")){
-			FileProcessService service=new FileProcessService();//业务操作类
 			String fileLocation=textField.getText();//得到路径
 			
 			String[] str = fileLocation.split("\\|");
-			CodeFile code= new CodeFile();
+//			CodeFile code= new CodeFile();
 			int num =0;
 			
 			for(int i=0;i<str.length;i++) {
 				try {
-					String str2 = service.StringFilter(FileProcessService.File2String(str[i]));
+					String str2 = FileProcessService.StringFilter(FileProcessService.File2String(str[i]));
 					num = num + str2.length();
 				} catch (PatternSyntaxException e1) {
 					// TODO Auto-generated catch block
