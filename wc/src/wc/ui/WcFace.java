@@ -56,7 +56,7 @@ public class WcFace extends JFrame implements ActionListener{
 	private final JButton exit = new JButton("\u9000\u51FA");
 	private final JButton selectFile = new JButton("\u9009\u62E9\u6587\u4EF6");
 	private final JButton CountCodeNum = new JButton("\u8BA1\u7B97\u5B57\u7B26\u6570");
-	private final JButton LinesNum = new JButton("\u8BA1\u7B97\u884C\u6570");
+	private final JButton LinesNum = new JButton("\u8BA1\u7B97\u884C\u6570\u4E0E\u5355\u8BCD\u6570");
 	
 	private final JLabel totalLines = new JLabel("\u603B\u884C\u6570\uFF1A");
 	private final JLabel codeLines = new JLabel("\u4EE3\u7801\u884C\uFF1A");
@@ -64,6 +64,8 @@ public class WcFace extends JFrame implements ActionListener{
 	private final JLabel CodeNum = new JLabel("\u5B57\u7B26\u6570\uFF1A");
 	private final JLabel Annotation = new JLabel("\u6CE8\u91CA\u884C\uFF1A");
 	private final JLabel WordsNum = new JLabel("\u5355\u8BCD\u91CF\uFF1A");
+	private final JLabel filesNum = new JLabel("");
+	
 
 	/**
 	 * Create the frame.
@@ -105,12 +107,12 @@ public class WcFace extends JFrame implements ActionListener{
 		
 		textField = new JTextField();
 		textField.setText("请选择");
-		textField.setBounds(53, 10, 209, 23);
+		textField.setBounds(59, 10, 209, 23);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 //		选择文件按钮
-		selectFile.setBounds(266, 10, 93, 23);
+		selectFile.setBounds(278, 10, 81, 23);
 		contentPane.add(selectFile);
 		
 //		字符数文本
@@ -132,6 +134,13 @@ public class WcFace extends JFrame implements ActionListener{
 		WordsNum.setBounds(5, 82, 178, 24);
 		
 		contentPane.add(WordsNum);
+		
+		
+		filesNum.setFont(new Font("宋体", Font.PLAIN, 20));
+		filesNum.setBounds(270, 59, 154, 29);
+		contentPane.add(filesNum);
+		
+		
 		exit.addActionListener(this);
 		selectFile.addActionListener(this);
 		LinesNum.addActionListener(this);
@@ -225,6 +234,4 @@ public class WcFace extends JFrame implements ActionListener{
 			CodeNum.setText("字符数："+num);
 		}
 	}
-	
-	
 }

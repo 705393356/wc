@@ -75,6 +75,12 @@ public class CodeFile {
 	public void setFlag(int flag) {
 		this.flag = flag;
 	}
+
+	@Override
+	public String toString() {
+		return "CodeFile [flag=" + flag + ", CodeLines=" + CodeLines + ", NullLines=" + NullLines + ", Annotations="
+				+ Annotations + ", TotalLines=" + TotalLines + ", WordNum=" + WordNum + "]";
+	}
 	
 	
 }
