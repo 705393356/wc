@@ -50,6 +50,11 @@ public class FileProcessService {
 		int WordsNum = 0;
 		File file=new File(filelocation);
 		if(file.exists()){
+			
+			if(!(file.getName()).endsWith(".java")){
+				codeFile.setFlag(-1);
+				return codeFile;
+			}
 			FileInputStream input=new FileInputStream(file);
 			@SuppressWarnings("resource")
 			BufferedReader reader=new BufferedReader(new InputStreamReader(input));
@@ -74,14 +79,14 @@ public class FileProcessService {
 					codeFile.setAnnotations(codeFile.getAnnotations()+1);
 				}
 				
-				
 			}
 			codeFile.setWordNum(WordsNum);
 			codeFile.setTotalLines();
 		}else {
-			return null;
+			codeFile.setFlag(0);
+			return codeFile;
 		}
-		
+		codeFile.setFlag(1);
 		return codeFile;
 		
 	}
@@ -104,7 +109,6 @@ public class FileProcessService {
 				flag=0;
 				continue;
 			}
-			
 			
 		}
 		System.out.println(num);

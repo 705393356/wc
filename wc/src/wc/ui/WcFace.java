@@ -20,6 +20,8 @@ import java.util.regex.PatternSyntaxException;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 
 import javax.swing.JTextField;
@@ -31,6 +33,7 @@ public class WcFace extends JFrame implements ActionListener{
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JPanel contentPane2;
 	private JTextField textField;
 	
 
@@ -163,12 +166,17 @@ public class WcFace extends JFrame implements ActionListener{
 			String fileName=textField.getText();//得到路径
 			
 			String[] str = fileName.split("\\|");
-			CodeFile code= new CodeFile();
+			CodeFile code = new CodeFile();
 			
 			for(int i = 0;i<str.length;i++){
 //				System.out.println(str[i]);
 					try {
 						CodeFile newCode=FileProcessService.getLines(str[i]);
+						if(code.getFlag() == 0){
+							JOptionPane.showMessageDialog(contentPane2, "文件不存在", "提示消息",JOptionPane.WARNING_MESSAGE);
+						}else if(code.getFlag() == -1){
+							JOptionPane.showMessageDialog(contentPane2, "存在文件不是java类型", "提示消息",JOptionPane.WARNING_MESSAGE);
+						}
 						
 						System.out.println("总数行="+newCode.getTotalLines());
 						System.out.println("空行:"+newCode.getNullLines());
@@ -189,8 +197,8 @@ public class WcFace extends JFrame implements ActionListener{
 			Annotation.setText("注释行："+code.getAnnotations());
 			WordsNum.setText("单词量："+code.getWordNum());
 			
-		}else if(soruceName.equals("计算字符数")){
-			String fileLocation=textField.getText();//得到路径
+		}else if(soruceName.equals("计算字符数")){			//监听事件
+			String fileLocation=textField.getText();	//得到路径
 			
 			String[] str = fileLocation.split("\\|");
 //			CodeFile code= new CodeFile();
@@ -198,6 +206,12 @@ public class WcFace extends JFrame implements ActionListener{
 			
 			for(int i=0;i<str.length;i++) {
 				try {
+					File file=new File(str[i]);
+					if(!file.exists()){
+						JOptionPane.showMessageDialog(contentPane2, "文件不存在", "提示消息",JOptionPane.WARNING_MESSAGE);
+					}else if(file.getName().endsWith(".java")){
+						JOptionPane.showMessageDialog(contentPane2, "存在文件不是java类型", "提示消息",JOptionPane.WARNING_MESSAGE);
+					}
 					String str2 = FileProcessService.StringFilter(FileProcessService.File2String(str[i]));
 					num = num + str2.length();
 				} catch (PatternSyntaxException e1) {

@@ -2,6 +2,8 @@ package wc.model;
 
 public class CodeFile {
 
+	private int flag = 0;
+	
 	private int CodeLines = 0;
 	private int NullLines = 0;
 	private int Annotations = 0;
@@ -64,6 +66,14 @@ public class CodeFile {
 
 	public void setWordNum(int wordNum) {
 		WordNum = wordNum;
+	}
+
+	public int getFlag() {
+		return flag;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
 	}
 	
 	
