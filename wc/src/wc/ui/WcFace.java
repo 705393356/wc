@@ -32,6 +32,7 @@ public class WcFace extends JFrame implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static JPanel Pane;
 	private JPanel contentPane;
 	private JPanel contentPane2;
 	private JTextField textField;
@@ -41,16 +42,27 @@ public class WcFace extends JFrame implements ActionListener{
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+		
+		if (args.length <= 0){
+            System.err.println("请输入参数： -a");
+            return;
+		}
+		if(args[0].equals("-a")){
+			EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WcFace frame = new WcFace();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+						WcFace frame = new WcFace();
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
 				}
 			}
-		});
+			});
+		}else {
+			System.err.println("参数错误,请输入： -a");
+			return;
+		}
+		
 	}
 	
 	private final JButton exit = new JButton("\u9000\u51FA");
