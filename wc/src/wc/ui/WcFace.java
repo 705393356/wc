@@ -42,11 +42,7 @@ public class WcFace extends JFrame implements ActionListener{
 	 */
 	public static void main(String[] args) {
 		
-		if (args.length <= 0){
-            System.err.println("请输入参数： -a");
-            return;
-		}
-		if(args[0].equals("-a")){
+
 			EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -57,12 +53,8 @@ public class WcFace extends JFrame implements ActionListener{
 				}
 			}
 			});
-		}else {
-			System.err.println("参数错误,请输入： -a");
-			return;
-		}
-		
 	}
+		
 	
 	private final JButton exit = new JButton("\u9000\u51FA");
 	private final JButton selectFile = new JButton("\u9009\u62E9\u6587\u4EF6");
