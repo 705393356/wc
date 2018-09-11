@@ -83,7 +83,7 @@ public class FileProcessService {
 			codeFile.setWordNum(WordsNum);
 			codeFile.setTotalLines();
 		}else {
-			codeFile.setFlag(0);
+			codeFile.setFlag(1);
 			return codeFile;
 		}
 		codeFile.setFlag(1);

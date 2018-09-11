@@ -32,7 +32,6 @@ public class WcFace extends JFrame implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static JPanel Pane;
 	private JPanel contentPane;
 	private JPanel contentPane2;
 	private JTextField textField;
@@ -182,7 +181,7 @@ public class WcFace extends JFrame implements ActionListener{
 		}else if(soruceName.equals("退出")){// 监听事件
 			System.exit(0);//退出
 		
-		}else if(soruceName.equals("计算行数")){// 监听事件
+		}else if(soruceName.equals("计算行数与单词数")){// 监听事件
 			
 			String fileName=textField.getText();//得到路径
 			
@@ -190,13 +189,15 @@ public class WcFace extends JFrame implements ActionListener{
 			CodeFile code = new CodeFile();
 			
 			for(int i = 0;i<str.length;i++){
-//				System.out.println(str[i]);
+				System.out.println("????"+str[i]);
 					try {
 						CodeFile newCode=FileProcessService.getLines(str[i]);
-						if(code.getFlag() == 0){
+						if(newCode.getFlag() == 0){
 							JOptionPane.showMessageDialog(contentPane2, "文件不存在", "提示消息",JOptionPane.WARNING_MESSAGE);
-						}else if(code.getFlag() == -1){
+							return ;
+						}else if(newCode.getFlag() == -1){
 							JOptionPane.showMessageDialog(contentPane2, "存在文件不是java类型", "提示消息",JOptionPane.WARNING_MESSAGE);
+							return;
 						}
 						
 						System.out.println("总数行="+newCode.getTotalLines());
@@ -228,10 +229,13 @@ public class WcFace extends JFrame implements ActionListener{
 			for(int i=0;i<str.length;i++) {
 				try {
 					File file=new File(str[i]);
+//					System.out.println("？？？"+file.getName());
 					if(!file.exists()){
 						JOptionPane.showMessageDialog(contentPane2, "文件不存在", "提示消息",JOptionPane.WARNING_MESSAGE);
-					}else if(file.getName().endsWith(".java")){
+						return;
+					}else if(!file.getName().endsWith(".java")){
 						JOptionPane.showMessageDialog(contentPane2, "存在文件不是java类型", "提示消息",JOptionPane.WARNING_MESSAGE);
+						return;
 					}
 					String str2 = FileProcessService.StringFilter(FileProcessService.File2String(str[i]));
 					num = num + str2.length();
